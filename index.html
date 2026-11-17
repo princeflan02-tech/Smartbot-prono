@@ -1,0 +1,145 @@
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transfert Rapide</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+  body{background:#0d0d0d;display:flex;justify-content:center}
+  .page{width:100%;max-width:480px;background:linear-gradient(180deg,#1a0033,#4b0082,#ff0055);padding-bottom:20px;text-align:center;min-height:100vh}
+  .header{padding:22px 15px;background:linear-gradient(90deg,#FFD700,#FF0055,#8A00FF);border-bottom:4px solid #FFD700}
+  .header h1{font-size:23px;color:white;text-transform:uppercase;text-shadow:2px 2px 0 #000}
+  .header p{color:white;font-size:13px;margin-top:5px}
+  .solde-box{background:#FFD700;color:#111;margin:15px;border-radius:18px;padding:18px}
+  .solde-box small{font-size:13px;font-weight:bold}
+  .solde-box .montant{font-size:32px;font-weight:900}
+  h2{font-size:18px;margin:16px 0;color:#FFD700;text-transform:uppercase;letter-spacing:1px;text-shadow:2px 2px 0 #000}
+  .box{background:#1e0040;border:2px solid #FFD700;border-radius:18px;padding:18px;margin:15px;text-align:left}
+  .box label{color:#FFD700;font-weight:bold;font-size:14px}
+  .box input,.box select{width:100%;padding:13px;border-radius:10px;border:1px solid #444;background:#2a0055;color:white;margin:6px 0 12px 0;font-size:16px}
+  .btn-main{background:#FFD700;color:#111;border:none;padding:15px;width:100%;border-radius:12px;font-weight:bold;font-size:16px;cursor:pointer;margin-top:5px}
+  .btn-wave{background:#1DC4F2;color:white;border:none;padding:15px;width:100%;border-radius:12px;font-weight:bold;font-size:16px;cursor:pointer;margin-top:10px;display:block;text-align:center;text-decoration:none}
+  .btn-green{background:#00FF66;color:#111;border:none;padding:15px;width:100%;border-radius:12px;font-weight:bold;font-size:16px;cursor:pointer;margin-top:10px}
+  .btn-white{background:white;color:#111;border:none;padding:12px;width:100%;border-radius:10px;font-weight:bold;font-size:14px;cursor:pointer;margin-top:10px}
+  .one{background:#2a0055;border-radius:12px;padding:12px;margin:10px 0;border-left:5px solid #FF0055;color:white;line-height:1.6}
+  .one b{color:#FFD700}
+  .badge{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:bold}
+  .badge-attente{background:#FFD700;color:#111}
+  .badge-ok{background:#00FF66;color:#111}
+  .tab{display:flex;gap:10px;margin:15px}
+  .tab button{flex:1;padding:12px;border-radius:10px;border:none;font-weight:bold;cursor:pointer}
+  .tab .active{background:#FFD700}
+  .tab .inactive{background:#444;color:white}
+  footer{margin-top:20px;font-size:13px;color:white;padding:15px}
+  footer b{color:#FFD700}
+  .info{color:#ccc;font-size:13px;line-height:1.6;text-align:center}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header"><h1>💸 TRANSFERT RAPIDE</h1><p>Recharge Wave • Envoie Orange / Moov<br><b>Transfert Rapide</b></p></div>
+  <div class="tab">
+    <button id="tab-client" class="active" onclick="showTab('client')">📤 Mon Portefeuille</button>
+    <button id="tab-admin" class="inactive" onclick="showTab('admin')">👑 Admin</button>
+  </div>
+  <div id="page-client">
+    <div class="solde-box">
+      <small>👋 <span id="nom-affiche">Invité</span> • TON SOLDE</small>
+      <div class="montant"><span id="solde">0</span> FCFA</div>
+      <small id="num-affiche">Connecte-toi pour voir ton solde</small>
+    </div>
+    <div class="box" id="box-login">
+      <label>Ton numéro (c'est ton compte)</label>
+      <input id="login-num" type="tel" placeholder="Ex: 07 07 07 07 07">
+      <label>Ton nom</label>
+      <input id="login-nom" type="text" placeholder="Ex: Kofi">
+      <button class="btn-main" onclick="login()">Entrer dans mon portefeuille ✅</button>
+    </div>
+    <div id="box-compte" style="display:none">
+      <h2>1️⃣ Recharger mon solde</h2>
+      <div class="box">
+        <p class="info">Clique, paie sur Wave <b style="color:white">Transfert Rapide</b>, reviens et déclare ton paiement.</p>
+        <a class="btn-wave" href="https://pay.wave.com/m/M_ci_FfejT_Toqv1U/c/ci/" target="_blank">📲 PAYER SUR WAVE - TRANSFERT RAPIDE</a>
+        <label style="margin-top:15px;display:block">Montant que tu as envoyé sur Wave</label>
+        <input id="montant-recharge" type="number" placeholder="Ex: 10000">
+        <label>Code de transaction Wave (dans ton SMS Wave)</label>
+        <input id="code-wave" type="text" placeholder="Ex: WAVE-1234 ou le code du SMS">
+        <button class="btn-green" onclick="demanderRecharge()">✅ J'ai payé, valider ma recharge</button>
+        <p class="info" style="margin-top:10px">Après ta déclaration, l'admin vérifie sur Wave et valide. Ton solde apparaît.</p>
+      </div>
+      <h2>2️⃣ Envoyer vers Orange / Moov</h2>
+      <div class="box">
+        <label>Vers quel réseau ?</label>
+        <select id="reseau">
+          <option value="Orange Money">🧡 Orange Money</option>
+          <option value="Moov Money">💙 Moov Money</option>
+        </select>
+        <label>Numéro du destinataire</label>
+        <input id="numero-dest" type="tel" placeholder="Ex: 07 07 07 07 07">
+        <label>Montant que la personne doit recevoir</label>
+        <input id="montant-envoi" type="number" placeholder="Ex: 5000" oninput="calculerFraisAffichage()">
+        <div id="frais-box" style="background:#2a0055;padding:12px;border-radius:10px;color:white;line-height:1.7;display:none;margin-bottom:10px">
+          Montant reçu par la personne : <b id="a-montant" style="color:#FFD700">0 FCFA</b><br>
+          Frais Transfert Rapide : <b id="a-frais" style="color:#FFD700">0 FCFA</b><br>
+          Total retiré de ton solde : <b id="a-total" style="color:#00FF66">0 FCFA</b>
+        </div>
+        <button class="btn-main" onclick="envoyerTransfert()">📤 Envoyer maintenant</button>
+      </div>
+      <h2>📜 Mes demandes</h2>
+      <div class="box"><div id="mes-demandes"></div></div>
+    </div>
+  </div>
+  <div id="page-admin" style="display:none">
+    <h2>👑 Recharges à valider</h2>
+    <div class="box"><div id="liste-recharges"></div></div>
+    <h2>👑 Transferts à faire</h2>
+    <div class="box"><p class="info">Ici tu vois les transferts. Tu envoies le <b style="color:white">montant net</b> au destinataire, tu gardes les frais.</p><div id="liste-transferts"></div></div>
+  </div>
+  <footer><b>Transfert Rapide</b><br>Rapide & Fiable</footer>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, onValue, push, set, update, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyCHXhEHpra0zFJl3dqHih0_BQVZTOCILPI",
+  authDomain: "ckj-plateforme.firebaseapp.com",
+  databaseURL: "https://ckj-plateforme-default-rtdb.firebaseio.com",
+  projectId: "ckj-plateforme",
+  storageBucket: "ckj-plateforme.firebasestorage.app",
+  messagingSenderId: "635659464722",
+  appId: "1:635659464722:web:db19f30f1aa07546e4a8cb"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+function cleanNum(n){ return n.replace(/[^0-9]/g,''); }
+function getUser(){ return { num: localStorage.getItem('fsp_num') || '', nom: localStorage.getItem('fsp_nom') || '' }; }
+function majUI(){
+  const u = getUser();
+  if(u.num){
+    document.getElementById('box-login').style.display='none';
+    document.getElementById('box-compte').style.display='block';
+    document.getElementById('nom-affiche').innerText = u.nom || 'Client';
+    document.getElementById('num-affiche').innerText = u.num;
+    onValue(ref(db, "wallets/"+cleanNum(u.num)), (snap)=>{ const d = snap.val(); document.getElementById('solde').innerText = (d?.solde || 0).toLocaleString('fr-FR'); });
+    onValue(ref(db, "recharges"), (snap)=>{
+      let html=''; const data=snap.val();
+      if(data){ Object.values(data).filter(r=>cleanNum(r.num)===cleanNum(u.num)).reverse().forEach(r=>{ html+='<div class="one">Recharge <b>'+r.montant+' FCFA</b> • Code: '+r.code+' • <span class="badge '+(r.statut==='Validé'?'badge-ok':'badge-attente')+'">'+r.statut+'</span></div>'; }); }
+      onValue(ref(db, "transferts_fsp"), (snap2)=>{ let html2=''; const data2=snap2.val(); if(data2){ Object.values(data2).filter(t=>cleanNum(t.num_client)===cleanNum(u.num)).reverse().forEach(t=>{ html2+='<div class="one">Envoi <b>'+t.montant+' FCFA</b> vers '+t.reseau+' <b>'+t.numero+'</b> • <span class="badge '+(t.statut==='Envoyé'?'badge-ok':'badge-attente')+'">'+t.statut+'</span></div>'; }); } document.getElementById('mes-demandes').innerHTML = (html+html2) || '<p style="color:#ccc">Aucune demande.</p>'; });
+    });
+  }
+}
+majUI();
+window.login = function(){ const num=document.getElementById('login-num').value.trim(); const nom=document.getElementById('login-nom').value.trim(); if(!num||!nom){alert('Mets ton numéro et ton nom Boss !');return;} localStorage.setItem('fsp_num', num); localStorage.setItem('fsp_nom', nom); majUI(); alert('Bienvenue '+nom+' ! Ton solde est en haut.'); }
+window.showTab = function(tab){ document.getElementById('page-client').style.display = tab==='client'?'block':'none'; document.getElementById('page-admin').style.display = tab==='admin'?'block':'none'; document.getElementById('tab-client').className = tab==='client'?'active':'inactive'; document.getElementById('tab-admin').className = tab==='admin'?'active':'inactive'; }
+function calculerFrais(montant){ if(montant<=0) return 0; if(montant<=5000) return 200; if(montant<=10000) return 300; if(montant<=20000) return 500; if(montant<=50000) return 800; return Math.round(montant*0.02); }
+window.calculerFraisAffichage = function(){ const m=parseInt(document.getElementById('montant-envoi').value)||0; const f=calculerFrais(m); document.getElementById('a-montant').innerText=m.toLocaleString('fr-FR')+' FCFA'; document.getElementById('a-frais').innerText=f.toLocaleString('fr-FR')+' FCFA'; document.getElementById('a-total').innerText=(m+f).toLocaleString('fr-FR')+' FCFA'; document.getElementById('frais-box').style.display='block'; }
+window.demanderRecharge = function(){ const u=getUser(); const montant=parseInt(document.getElementById('montant-recharge').value)||0; const code=document.getElementById('code-wave').value.trim(); if(!u.num){alert('Connecte-toi d\'abord !');return;} if(montant<=0||!code){alert('Mets le montant et le code Wave !');return;} push(ref(db,"recharges"), {num:u.num, nom:u.nom, montant:montant, code:code, statut:"En attente", date:new Date().toLocaleString("fr-FR")}); document.getElementById('montant-recharge').value=''; document.getElementById('code-wave').value=''; alert('Demande envoyée ! L\'admin va vérifier sur Wave et valider ton solde.'); }
+window.envoyerTransfert = async function(){ const u=getUser(); const reseau=document.getElementById('reseau').value; const numero=document.getElementById('numero-dest').value.trim(); const montant=parseInt(document.getElementById('montant-envoi').value)||0; if(!numero||montant<=0){alert('Mets le numéro et le montant !');return;} const frais=calculerFrais(montant); const total=montant+frais; const snap=await get(ref(db,"wallets/"+cleanNum(u.num))); const solde=snap.val()?.solde||0; if(solde<total){alert('Solde insuffisant ! Ton solde est '+solde+' FCFA, il faut '+total+' FCFA (avec frais). Recharge d\'abord.');return;} await update(ref(db,"wallets/"+cleanNum(u.num)), {solde: solde-total, nom:u.nom}); push(ref(db,"transferts_fsp"), {num_client:u.num, nom_client:u.nom, reseau:reseau, numero:numero, montant:montant, frais:frais, total:total, statut:"En attente", date:new Date().toLocaleString("fr-FR")}); document.getElementById('numero-dest').value=''; document.getElementById('montant-envoi').value=''; document.getElementById('frais-box').style.display='none'; alert('Transfert lancé ! '+montant+' FCFA va être envoyé à '+numero+' ('+reseau+'). Frais: '+frais+' FCFA.'); }
+onValue(ref(db,"recharges"), (snap)=>{ let html=''; const data=snap.val(); if(data){ Object.entries(data).reverse().forEach(([id,r])=>{ if(r.statut!=='Validé'){ html+='<div class="one"><b>'+r.nom+'</b> ('+r.num+')<br>Recharge: <b style="color:#00FF66">'+r.montant+' FCFA</b><br>Code Wave: <b>'+r.code+'</b><br>'+r.date+'<br><button onclick="validerRecharge(\''+id+'\',\''+cleanNum(r.num)+'\','+r.montant+')" style="background:#00FF66;border:none;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:8px">✅ Valider - Créditer solde</button></div>'; } }); } document.getElementById('liste-recharges').innerHTML=html||'<p style="color:#ccc">Aucune recharge en attente.</p>'; });
+window.validerRecharge = async function(id, numClean, montant){ const snap=await get(ref(db,"wallets/"+numClean)); const ancien=snap.val()?.solde||0; await update(ref(db,"wallets/"+numClean), {solde: ancien+montant}); await update(ref(db,"recharges/"+id), {statut:"Validé"}); alert('Validé ! '+montant+' FCFA ajouté au solde.'); }
+onValue(ref(db,"transferts_fsp"), (snap)=>{ let html=''; const data=snap.val(); if(data){ Object.entries(data).reverse().forEach(([id,t])=>{ if(t.statut!=='Envoyé'){ html+='<div class="one"><b>'+t.nom_client+'</b> ('+t.num_client+')<br>👉 Transférer <b style="color:#00FF66">'+t.montant+' FCFA</b> vers '+t.reseau+' : <b>'+t.numero+'</b><br>Tes frais déjà gardés : <b>'+t.frais+' FCFA</b><br>'+t.date+'<br><button onclick="marquerEnvoye(\''+id+'\')" style="background:#00FF66;border:none;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:8px">✅ J\'ai transféré</button></div>'; } }); } document.getElementById('liste-transferts').innerHTML=html||'<p style="color:#ccc">Aucun transfert en attente.</p>'; });
+window.marquerEnvoye = function(id){ update(ref(db,"transferts_fsp/"+id), {statut:"Envoyé"}); }
+</script>
+</body>
+</html>
